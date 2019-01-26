@@ -1,12 +1,20 @@
-# BLAS Support
+# BLAS 支持
 
 The Basic Linear Algebra Subprograms (BLAS) define a set of fundamental operations on vectors and matrices which can be used to create optimized higher-level linear algebra functionality.
 
+基础线性代数子程序定义了一个针对向量和矩阵的基本操作集合，这能够被用于创造优化的高级线性代数函数。
+
 The library provides a low-level layer which corresponds directly to the C-language BLAS standard, referred to here as “CBLAS”, and a higher-level interface for operations on GSL vectors and matrices. Users who are interested in simple operations on GSL vector and matrix objects should use the high-level layer described in this chapter. The functions are declared in the file `gsl_blas.h`and should satisfy the needs of most users.
 
-Note that GSL matrices are implemented using dense-storage so the interface only includes the corresponding dense-storage BLAS functions. The full BLAS functionality for band-format and packed-format matrices is available through the low-level CBLAS interface. Similarly, GSL vectors are restricted to positive strides, whereas the low-level CBLAS interface supports negative strides as specified in the BLAS standard [[1\]](https://www.gnu.org/software/gsl/doc/html/blas.html#f1).
+本库提供了一个低级层与C语言BLAS标准(再次引用为"CBLAS")直接相一致，以及一个高级接口用于对GSL向量和矩阵进行操作。对在GSL向量和矩阵对象上进行操作感兴趣的用户应该使用本章描述到的高级层。相应函数被声明在文件`gsl_blas.h`中，应该能满足大部分用户的需求。
+
+Note that GSL matrices are implemented using dense-storage so the interface only includes the corresponding dense-storage BLAS functions. The full BLAS functionality for band-format and packed-format matrices is available through the low-level CBLAS interface. Similarly, GSL vectors are restricted to positive strides, whereas the low-level CBLAS interface supports negative strides as specified in the BLAS standard [[1]](https://www.gnu.org/software/gsl/doc/html/blas.html#f1).
+
+注意GSL矩阵使用紧密存储来实现，因此接口仅包含相应的紧密存储BLAS函数。完整的用于band-format格式和压缩格式矩阵的BLAS函数可以通过底层CBLAS接口获取。相似地，GSL向量被限制于正跨度，然而低层CBLAS接口支持负跨度，就如BLAS标准中声明的一样。
 
 The interface for the `gsl_cblas` layer is specified in the file `gsl_cblas.h`. This interface corresponds to the BLAS Technical Forum’s standard for the C interface to legacy BLAS implementations. Users who have access to other conforming CBLAS implementations can use these in place of the version provided by the library. Note that users who have only a Fortran BLAS library can use a CBLAS conformant wrapper to convert it into a CBLAS library. A reference CBLAS wrapper for legacy Fortran implementations exists as part of the CBLAS standard and can be obtained from Netlib. The complete set of CBLAS functions is listed in an [appendix](https://www.gnu.org/software/gsl/doc/html/cblas.html#chap-cblas).
+
+`gsl_cblas`层的接口声明与文件`gsl_cblas.h`中。这个接口与BLAS技术论坛理的合法BLAS实现的C接口标准一致。能够访问其它遵照CBLAS实现的库的用户能够使用该库以替换本库提供的版本。注意对于只有Fortran BLAS库的用于可以使用CBLAS一致包装器来将其转换为CBLAS库。一个可参考的用于合法Fortran实现的CBLAS包装器存在于CBLAS的部分标准中并能从Netlib中获取。CBLAS函数的完整集被列在[appendix](https://www.gnu.org/software/gsl/doc/html/cblas.html#chap-cblas)中。
 
 There are three levels of BLAS operations,
 
@@ -14,6 +22,13 @@ There are three levels of BLAS operations,
 | ----------- | ------------------------------------------------------------ |
 | **Level 2** | Matrix-vector operations, e.g. ![y = \alpha A x + \beta y](https://www.gnu.org/software/gsl/doc/html/_images/math/624871f488f273648511a3e51c9fd2ceb3c4f362.png) |
 | **Level 3** | Matrix-matrix operations, e.g. ![C = \alpha A B + C](https://www.gnu.org/software/gsl/doc/html/_images/math/f416e48e9915bc751d298e7de209cd0370dd8a7f.png) |
+
+这里有三个层级的BLAS操作，
+
+| **Level 1** | Vector operations, e.g. ![img](https://www.gnu.org/software/gsl/doc/html/_images/math/bf4c0bf09422b831ce1c179126efb61a83cc6bb7.png) |
+| ----------- | ------------------------------------------------------------ |
+| **Level 2** | Matrix-vector operations, e.g. ![img](https://www.gnu.org/software/gsl/doc/html/_images/math/624871f488f273648511a3e51c9fd2ceb3c4f362.png) |
+| **Level 3** | Matrix-matrix operations, e.g. ![img](https://www.gnu.org/software/gsl/doc/html/_images/math/f416e48e9915bc751d298e7de209cd0370dd8a7f.png) |
 
 Each routine has a name which specifies the operation, the type of matrices involved and their precisions. Some of the most common operations and their names are given below,
 
@@ -25,7 +40,32 @@ Each routine has a name which specifies the operation, the type of matrices invo
 | **MM**   | matrix-matrix product, ![A B](https://www.gnu.org/software/gsl/doc/html/_images/math/818ae2ad823347cb78411eacd060db363a1f585e.png) |
 | **SM**   | matrix-matrix solve, ![inv(A) B](https://www.gnu.org/software/gsl/doc/html/_images/math/563e7599b23cae3cb657e96b38bbb9033d1609d6.png) |
 
+每个程序有一个名字声明该操作，相关矩阵的类型和精度。大多数常用的操作和名字被给在下边，
+
+| **DOT**  | scalar product, ![img](https://www.gnu.org/software/gsl/doc/html/_images/math/e872907b8ee554d41f9375630dff5c9a4de74524.png) |
+| -------- | ------------------------------------------------------------ |
+| **AXPY** | vector sum, ![img](https://www.gnu.org/software/gsl/doc/html/_images/math/d48df2ffd4af5d676901723fe3843dbb3c01eead.png) |
+| **MV**   | matrix-vector product, ![img](https://www.gnu.org/software/gsl/doc/html/_images/math/5fc2bb820b35f1db304cfb47fab3deb258274405.png) |
+| **SV**   | matrix-vector solve, ![img](https://www.gnu.org/software/gsl/doc/html/_images/math/c0b168a003f9d5b3bd47ed613a306e2c9f60c9a7.png) |
+| **MM**   | matrix-matrix product, ![img](https://www.gnu.org/software/gsl/doc/html/_images/math/818ae2ad823347cb78411eacd060db363a1f585e.png) |
+| **SM**   | matrix-matrix solve, ![img](https://www.gnu.org/software/gsl/doc/html/_images/math/563e7599b23cae3cb657e96b38bbb9033d1609d6.png) |
+
 The types of matrices are,
+
+| **GE** | general           |
+| ------ | ----------------- |
+| **GB** | general band      |
+| **SY** | symmetric         |
+| **SB** | symmetric band    |
+| **SP** | symmetric packed  |
+| **HE** | hermitian         |
+| **HB** | hermitian band    |
+| **HP** | hermitian packed  |
+| **TR** | triangular        |
+| **TB** | triangular band   |
+| **TP** | triangular packed |
+
+矩阵的类型是，
 
 | **GE** | general           |
 | ------ | ----------------- |
@@ -48,21 +88,35 @@ Each operation is defined for four precisions,
 | **C** | single complex |
 | **Z** | double complex |
 
+每个操作被定义为有4种精度，
+
+| **S** | single real    |
+| ----- | -------------- |
+| **D** | double real    |
+| **C** | single complex |
+| **Z** | double complex |
+
 Thus, for example, the name SGEMM stands for “single-precision general matrix-matrix multiply” and ZGEMM stands for “double-precision complex matrix-matrix multiply”.
+
+因此，例如，名字SGEMM代表"单精度通用矩阵矩阵乘法"以及ZGEMM代表"双精度复矩阵矩阵乘法"。
 
 Note that the vector and matrix arguments to BLAS functions must not be aliased, as the results are undefined when the underlying arrays overlap ([Aliasing of arrays](https://www.gnu.org/software/gsl/doc/html/usage.html#aliasing-of-arrays)).
 
-## GSL BLAS Interface
+注意BLAS函数的向量和矩阵实参禁止别名，因为当底下的数组重叠([Aliasing of arrays](https://www.gnu.org/software/gsl/doc/html/usage.html#aliasing-of-arrays))时结果是未定义的。
+
+## GSL BLAS 接口
 
 GSL provides dense vector and matrix objects, based on the relevant built-in types. The library provides an interface to the BLAS operations which apply to these objects. The interface to this functionality is given in the file `gsl_blas.h`.
 
+GSL提供了基于相关内建类型的紧密向量和矩阵对象。本库提供了一个应用与这些对象的BLAS操作的接口。这个函数的接口被给在文件`gsl_blas.h`中。
+
 ### Level 1
-
-
 
 - int `gsl_blas_sdsdot`(float *alpha*, const gsl_vector_float * *x*, const gsl_vector_float * *y*, float * *result*)
 
   This function computes the sum ![\alpha + x^T y](https://www.gnu.org/software/gsl/doc/html/_images/math/be907e2c347edc891f15185a2549b3ff6d6d4f7e.png) for the vectors `x` and `y`, returning the result in `result`.
+
+  这个函数计算对于向量`x`和`y`的和$$\alpha+x^Ty$$，返回结果在`result`中。
 
 - int `gsl_blas_sdot`(const gsl_vector_float * *x*, const gsl_vector_float * *y*, float * *result*)
 
@@ -72,11 +126,15 @@ GSL provides dense vector and matrix objects, based on the relevant built-in typ
 
   These functions compute the scalar product ![x^T y](https://www.gnu.org/software/gsl/doc/html/_images/math/e872907b8ee554d41f9375630dff5c9a4de74524.png) for the vectors `x` and `y`, returning the result in `result`.
 
+  这些函数计算了针对向量$$x$$和$$y$$的标量积$$x^Ty$$，返回结果在`result`中。
+
 - int `gsl_blas_cdotu`(const gsl_vector_complex_float * *x*, const gsl_vector_complex_float * *y*, gsl_complex_float * *dotu*)
 
 - int `gsl_blas_zdotu`(const gsl_vector_complex * *x*, const gsl_vector_complex * *y*, gsl_complex * *dotu*)
 
   These functions compute the complex scalar product ![x^T y](https://www.gnu.org/software/gsl/doc/html/_images/math/e872907b8ee554d41f9375630dff5c9a4de74524.png) for the vectors `x` and `y`, returning the result in `dotu`
+
+  这些函数计算了针对向量$$x$$和$$y$$的复标量积$$x^Ty$$，返回结果在`dotu`中。
 
 - int `gsl_blas_cdotc`(const gsl_vector_complex_float * *x*, const gsl_vector_complex_float * *y*, gsl_complex_float * *dotc*)
 
@@ -84,7 +142,7 @@ GSL provides dense vector and matrix objects, based on the relevant built-in typ
 
   These functions compute the complex conjugate scalar product ![x^H y](https://www.gnu.org/software/gsl/doc/html/_images/math/36e5c098c5123a44a8cf5294aa4f9a6bd25eb2ec.png) for the vectors `x` and `y`, returning the result in `dotc`
 
-
+  这些函数计算针对向量$$x$$和$$y$$的复共轭标量积$$x^Hy$$，返回结果在`dotc`中。
 
 - float `gsl_blas_snrm2`(const gsl_vector_float * *x*)
 
@@ -92,13 +150,15 @@ GSL provides dense vector and matrix objects, based on the relevant built-in typ
 
   These functions compute the Euclidean norm ![||x||_2 = \sqrt{\sum x_i^2}](https://www.gnu.org/software/gsl/doc/html/_images/math/4dca4f3fc2a45ba778cec427713e5d7909666334.png) of the vector `x`.
 
+  这些函数计算向量`x`的欧几里得模$$||x||_2=\sqrt{\sum{x_i^2}}$$。
+
 - float `gsl_blas_scnrm2`(const gsl_vector_complex_float * *x*)
 
 - double `gsl_blas_dznrm2`(const gsl_vector_complex * *x*)
 
   These functions compute the Euclidean norm of the complex vector `x`,![||x||_2 = \sqrt{\sum (\Re(x_i)^2 + \Im(x_i)^2)}.](https://www.gnu.org/software/gsl/doc/html/_images/math/b0aa7b9e8d8cd4e9d2edd46982cc69d2421cd496.png)
 
-
+  这些函数计算复向量`x`的欧几里得模，$$||x||_2=\sqrt{\sum{(R(x_i)^2+S(x_i)^2)}}$$。
 
 - float `gsl_blas_sasum`(const gsl_vector_float * *x*)
 
@@ -106,13 +166,15 @@ GSL provides dense vector and matrix objects, based on the relevant built-in typ
 
   These functions compute the absolute sum ![\sum |x_i|](https://www.gnu.org/software/gsl/doc/html/_images/math/7f5a721479f3559dfc62f991acb564069dbd6053.png) of the elements of the vector `x`.
 
+  这些函数计算向量`x`的元素的绝对和$$\sum{|x_i|}$$。
+
 - float `gsl_blas_scasum`(const gsl_vector_complex_float * *x*)
 
 - double `gsl_blas_dzasum`(const gsl_vector_complex * *x*)
 
   These functions compute the sum of the magnitudes of the real and imaginary parts of the complex vector `x`, ![\sum \left( |\Re(x_i)| + |\Im(x_i)| \right)](https://www.gnu.org/software/gsl/doc/html/_images/math/f2acf458b95f05810a941efd9b2b4e9e3849214a.png).
 
-
+  这些函数计算了复向量`x`的实部和虚部的幅值的和，$$\sum(|R(x_i)|+|S(x_i)|)$$。
 
 - CBLAS_INDEX_t `gsl_blas_isamax`(const gsl_vector_float * *x*)
 
@@ -124,7 +186,7 @@ GSL provides dense vector and matrix objects, based on the relevant built-in typ
 
   These functions return the index of the largest element of the vector `x`. The largest element is determined by its absolute magnitude for real vectors and by the sum of the magnitudes of the real and imaginary parts ![|\Re(x_i)| + |\Im(x_i)|](https://www.gnu.org/software/gsl/doc/html/_images/math/5be8fe92f25d71bc5cbfaed8544feed6f9c7a6c8.png) for complex vectors. If the largest value occurs several times then the index of the first occurrence is returned.
 
-
+  这些函数返回向量`x`的最大的元素的下标。最大元素是由实向量的绝对幅值或者复向量的实部和虚部的幅值和$$|R(x_i)|+|S(x_i)|$$。如果最大值会出现多次，那么会返回第一个出现的值的下标。
 
 - int `gsl_blas_sswap`(gsl_vector_float * *x*, gsl_vector_float * *y*)
 
@@ -136,7 +198,7 @@ GSL provides dense vector and matrix objects, based on the relevant built-in typ
 
   These functions exchange the elements of the vectors `x` and `y`.
 
-
+  这些函数交换向量`x`和`y`的元素。
 
 - int `gsl_blas_scopy`(const gsl_vector_float * *x*, gsl_vector_float * *y*)
 
@@ -148,7 +210,7 @@ GSL provides dense vector and matrix objects, based on the relevant built-in typ
 
   These functions copy the elements of the vector `x` into the vector `y`.
 
-
+  这个函数将向量`x`复制给向量`y`。
 
 - int `gsl_blas_saxpy`(float *alpha*, const gsl_vector_float * *x*, gsl_vector_float * *y*)
 
@@ -160,7 +222,7 @@ GSL provides dense vector and matrix objects, based on the relevant built-in typ
 
   These functions compute the sum ![y = \alpha x + y](https://www.gnu.org/software/gsl/doc/html/_images/math/bf4c0bf09422b831ce1c179126efb61a83cc6bb7.png) for the vectors `x` and `y`.
 
-
+  这些函数计算向量`x`和`y`的和$$y=\alpha x+y$$。
 
 - void `gsl_blas_sscal`(float *alpha*, gsl_vector_float * *x*)
 
@@ -176,7 +238,7 @@ GSL provides dense vector and matrix objects, based on the relevant built-in typ
 
   These functions rescale the vector `x` by the multiplicative factor [`alpha`](https://www.gnu.org/software/gsl/doc/html/montecarlo.html#c.alpha).
 
-
+  这些函数重新调节向量`x`的乘积系数[`alpha`](https://www.gnu.org/software/gsl/doc/html/montecarlo.html#c.alpha)。
 
 - int `gsl_blas_srotg`(float *a[]*, float *b[]*, float *c[]*, float *s[]*)
 
