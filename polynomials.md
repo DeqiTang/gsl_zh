@@ -1,10 +1,10 @@
-# Polynomials
+# 多项式
 
 This chapter describes functions for evaluating and solving polynomials. There are routines for finding real and complex roots of quadratic and cubic equations using analytic methods. An iterative polynomial solver is also available for finding the roots of general polynomials with real coefficients (of any order). The functions are declared in the header file `gsl_poly.h`.
 
+本章描述用于多项式求值和求解的函数。含有用于通过解析方法寻找二次和三次方程的实根和复根的程序。对于寻找一个具有实系数(任何阶)的广义多项式的根也有一个迭代多项式求解器是可以使用的。函数被声明在头文件`gsl_poly.h`中。
 
-
-## Polynomial Evaluation
+## 多项式求值
 
 The functions described here evaluate the polynomial
 
@@ -12,35 +12,55 @@ The functions described here evaluate the polynomial
 
 using Horner’s method for stability. Inline versions of these functions are used when `HAVE_INLINE`is defined.
 
+这里描述的函数对一下多项式进行求值
+
+$P(x) = c[0]+c[1]x+c[2]x^2+...+c[len-1]x^{len-1}​$
+
 - double `gsl_poly_eval`(const double *c[]*, const int *len*, const double *x*)
 
   This function evaluates a polynomial with real coefficients for the real variable `x`.
+
+  这个函数对一个具有实系数的实变量`x`的多项式进行求值。
 
 - gsl_complex `gsl_poly_complex_eval`(const double *c[]*, const int *len*, const gsl_complex *z*)
 
   This function evaluates a polynomial with real coefficients for the complex variable `z`.
 
+  这个函数对一个具有实系数的复变量`z`的多项式是进行求值。
+
 - gsl_complex `gsl_complex_poly_complex_eval`(const gsl_complex *c[]*, const int *len*, const gsl_complex *z*)
 
   This function evaluates a polynomial with complex coefficients for the complex variable `z`.
+
+  这个函数返回一个具有复系数的复变量`z`的多项式进行求值。
 
 - int `gsl_poly_eval_derivs`(const double *c[]*, const size_t *lenc*, const double *x*, double *res[]*, const size_t *lenres*)
 
   This function evaluates a polynomial and its derivatives storing the results in the array `res` of size `lenres`. The output array contains the values of ![d^k P(x)/d x^k](https://www.gnu.org/software/gsl/doc/html/_images/math/1600cca411950211f4183e112b84d963b9acf539.png) for the specified value of `x`starting with ![k = 0](https://www.gnu.org/software/gsl/doc/html/_images/math/7fe0629d90b771b38027bce3cadc1a36afe514bb.png).
 
+  这个函数可以求一个多项式的值以及其导数，将其结果存储在具有尺寸`lenres`的数组`res`中。输出数组包含$$d^kP(x)/dx^k$$的对于特定的`x`的值的值，从$$k=0$$开始。
 
 
-## Divided Difference Representation of Polynomials
+
+## 多项式的差商表示
 
 The functions described here manipulate polynomials stored in Newton’s divided-difference representation. The use of divided-differences is described in Abramowitz & Stegun sections 25.1.4 and 25.2.26, and Burden and Faires, chapter 3, and discussed briefly below.
+
+这里描述的函数操控以牛顿差商表示的多项式。差商的使用被描述在Abramowitz 和 Stegun的章节25.1.4 和 25.2.26以及Burden和Faires，第三章中，并会在下面得到简短描述。
 
 Given a function ![f(x)](https://www.gnu.org/software/gsl/doc/html/_images/math/c7deb6ce5befe14135ebd23fa69801be7a796b15.png), an ![n](https://www.gnu.org/software/gsl/doc/html/_images/math/a24554f1502cf204e7aa24a6c064962c3504de48.png)th degree interpolating polynomial ![P_{n}(x)](https://www.gnu.org/software/gsl/doc/html/_images/math/3e2aa44dea8683f01996ed384aebd152865740c3.png) can be constructed which agrees with ![f](https://www.gnu.org/software/gsl/doc/html/_images/math/d947f897010fa03fc9854d6af00264296a50930c.png) at ![n+1](https://www.gnu.org/software/gsl/doc/html/_images/math/a3b5b5b94d164a7db425e53cf0d842a76e90d2da.png) distinct points ![x_0,x_1,...,x_{n}](https://www.gnu.org/software/gsl/doc/html/_images/math/a0aea8f09eb918ad6ecc6e3f35174842a37c1baa.png). This polynomial can be written in a form known as Newton’s divided-difference representation
 
 ![P_{n}(x) = f(x_0) + \sum_{k=1}^n [x_0,x_1,...,x_k] (x-x_0)(x-x_1) \cdots (x-x_{k-1})](https://www.gnu.org/software/gsl/doc/html/_images/math/044dd38880eb78dd29915b85f8d2a7a71a96a2d9.png)
 
+给一个函数$$f(x)$$，一个$$n$$阶的插值多项式$$P_n(x)$$能被构建来在$$n+1$$个不同点$$x_0,x_1,...,x_n$$上与$$f$$相符。这个多项式能够以一个叫做牛顿差商表示的形式书写
+
+$P_n(x) = f(x_0)+\displaystyle\sum_{k=1}^{n}{[x_0,x_1,...,x_k](x-x_0)(x-x_1)...(x-x_{k-1})}$
+
 where the divided differences ![[x_0,x_1,...,x_k]](https://www.gnu.org/software/gsl/doc/html/_images/math/532aedc6dc9b02f5a48499a43080fe2d3a9c238c.png) are defined in section 25.1.4 of Abramowitz and Stegun. Additionally, it is possible to construct an interpolating polynomial of degree ![2n+1](https://www.gnu.org/software/gsl/doc/html/_images/math/c8f2db58f7120aae32ea289b45cc62c6a02130c5.png) which also matches the first derivatives of ![f](https://www.gnu.org/software/gsl/doc/html/_images/math/d947f897010fa03fc9854d6af00264296a50930c.png) at the points ![x_0,x_1,...,x_n](https://www.gnu.org/software/gsl/doc/html/_images/math/542e2ccb3ff98872f2b9730336305ae2bbe33126.png). This is called the Hermite interpolating polynomial and is defined as
 
 ![H_{2n+1}(x) = f(z_0) + \sum_{k=1}^{2n+1} [z_0,z_1,...,z_k] (x-z_0)(x-z_1) \cdots (x-z_{k-1})](https://www.gnu.org/software/gsl/doc/html/_images/math/59c62018c8806542b7b55d3503f53c18b4000966.png)
+
+其中差商$$[x_0,x_1,...,x_k]$$被定义在Abramowitz和Stegun的25.1.4小节。此外，
 
 where the elements of ![z = \{x_0,x_0,x_1,x_1,...,x_n,x_n\}](https://www.gnu.org/software/gsl/doc/html/_images/math/5de7f0979bcfbf5952f8abfdc09982a157961996.png) are defined by ![z_{2k} = z_{2k+1} = x_k](https://www.gnu.org/software/gsl/doc/html/_images/math/562b31e7bc6e44eba8aebee039c0e8866cfa5c2b.png). The divided-differences ![[z_0,z_1,...,z_k]](https://www.gnu.org/software/gsl/doc/html/_images/math/c18706b2d8130826f83c8bc4320be0ddbb083cfa.png) are discussed in Burden and Faires, section 3.4.
 
