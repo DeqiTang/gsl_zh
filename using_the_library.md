@@ -48,7 +48,7 @@ The library header files are installed in their own `gsl` directory. You should 
 #include <gsl/gsl_math.h>
 ```
 
-本库的头文件安装在它们自己的`gsl`目录。因此你应该编写任何具有`gsl/`目录前缀的预处理器include声明:
+本库的头文件安装在其自身的`gsl`目录下。因此你应该编写任何具有`gsl/`目录前缀的预处理器include声明:
 
 ```
 #include <gsl/gsl_math.h>
@@ -74,7 +74,15 @@ $ gcc -Wall -I/usr/local/include -c example.c
 
 The library is installed as a single file, `libgsl.a`. A shared version of the library `libgsl.so` is also installed on systems that support shared libraries. The default location of these files is`/usr/local/lib`. If this directory is not on the standard search path of your linker you will also need to provide its location as a command line flag.
 
+库是作为一个单一文件进行安装，`libgsl.a`。一个共享库版本`libgsl.so`也被安装在支持共享库的系统上。这些文件的默认位置是`/usr/local/lib`。如果这个目录没有在你的链接器的标准搜索路径上，你也应该需要以一个命令行参数来提供其位置。
+
 To link against the library you need to specify both the main library and a supporting CBLAS library, which provides standard basic linear algebra subroutines. A suitable CBLAS implementation is provided in the library `libgslcblas.a` if your system does not provide one. The following example shows how to link an application with the library:
+
+```
+$ gcc -L/usr/local/lib example.o -lgsl -lgslcblas -lm
+```
+
+为了链接库你需要明确主库以及提供标准线性代数子程序支持的CBLAS库。如果你的系统没有提供一个合适的CBLAS实现，在库`libgslclbas.a`中进行了提供。以下例子展示了如何将库链接到应用:
 
 ```
 $ gcc -L/usr/local/lib example.o -lgsl -lgslcblas -lm
@@ -82,13 +90,25 @@ $ gcc -L/usr/local/lib example.o -lgsl -lgslcblas -lm
 
 The default library path for `gcc` searches `/usr/local/lib` automatically so the `-L` option can be omitted when GSL is installed in its default location.
 
-The option `-lm` links with the system math library. On some systems it is not needed. [[2\]](https://www.gnu.org/software/gsl/doc/html/usage.html#f2)
+The option `-lm` links with the system math library. On some systems it is not needed. [[2]](https://www.gnu.org/software/gsl/doc/html/usage.html#f2)
 
-For a tutorial introduction to the GNU C Compiler and related programs, see “An Introduction to GCC” (ISBN 0954161793). [[3\]](https://www.gnu.org/software/gsl/doc/html/usage.html#f3)
+For a tutorial introduction to the GNU C Compiler and related programs, see “An Introduction to GCC” (ISBN 0954161793). [[3]](https://www.gnu.org/software/gsl/doc/html/usage.html#f3)
+
+`gcc`的默认自动库搜索路径是`/usr/local/lib`，因此当GSL安装在默认路径时`-L`选项可以被忽略掉。
+
+选项`-lm`与系统数学库进行链接。在一些系统上不需要指定。[[2]](https://www.gnu.org/software/gsl/doc/html/usage.html#f2)
+
+
 
 ### 链接到一个可选的BLAS库
 
 The following command line shows how you would link the same application with an alternative CBLAS library `libcblas.a`:
+
+```
+$ gcc example.o -lgsl -lcblas -lm
+```
+
+以下命令展示了你应当如何将同一个应用链接到一个可替代的CBLAS库`libcblas.a`:
 
 ```
 $ gcc example.o -lgsl -lcblas -lm
@@ -100,13 +120,23 @@ For the best performance an optimized platform-specific CBLAS library should be 
 $ gcc example.o -lgsl -lcblas -latlas -lm
 ```
 
+为了最好的性能一个优化的平台特定的CBLAS库应该被通过`-lcblas`使用。库必须要符合CBLAS标准。ATLAS包提供了一个具有CBLAS接口的可移植高性能BLAS库。它是免费软件并应该被任何需要快速向量和矩阵操作的工作所安装。以下命令行将会链接到ATLAS库以及其CBLAS接口:
+
+```
+$ gcc example.o -lgsl -lcblas -latlas -lm
+```
+
 If the ATLAS library is installed in a non-standard directory use the `-L` option to add it to the search path, as described above.
 
 For more information about BLAS functions see [BLAS Support](https://www.gnu.org/software/gsl/doc/html/blas.html#chap-blas-support).
 
+如果ATLAS库被安装在一个非标准目录，使用`-L`选项来将其添加到搜索路径，如上所示。
+
+了解关于BLAS函数的更多信息，参见[BLAS Support](https://www.gnu.org/software/gsl/doc/html/blas.html#chap-blas-support)。
 
 
-## Shared Libraries
+
+## 共享库
 
 To run a program linked with the shared version of the library the operating system must be able to locate the corresponding `.so` file at runtime. If the library cannot be found, the following error will occur:
 
