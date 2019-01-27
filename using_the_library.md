@@ -292,34 +292,40 @@ To use C++ exception handling within user-defined functions passed to the librar
 
 
 
-## Aliasing of arrays
+## 数组别名
 
 The library assumes that arrays, vectors and matrices passed as modifiable arguments are not aliased and do not overlap with each other. This removes the need for the library to handle overlapping memory regions as a special case, and allows additional optimizations to be used. If overlapping memory regions are passed as modifiable arguments then the results of such functions will be undefined. If the arguments will not be modified (for example, if a function prototype declares them as `const` arguments) then overlapping or aliased memory regions can be safely used.
 
-## Thread-safety
+## 线程安全
 
 The library can be used in multi-threaded programs. All the functions are thread-safe, in the sense that they do not use static variables. Memory is always associated with objects and not with functions. For functions which use *workspace* objects as temporary storage the workspaces should be allocated on a per-thread basis. For functions which use *table* objects as read-only memory the tables can be used by multiple threads simultaneously. Table arguments are always declared `const`in function prototypes, to indicate that they may be safely accessed by different threads.
 
+本库可以在多线程程序中进行使用。所有函数都是线程安全的，只要它们不使用静态变量。内存永远与对象而不是函数相一致。对于使用*workspace*对象作为临时存储的函数工作空间应该在每个线程的基础上分配。列表变量在函数原型中总是被声明为`const`，以表明其在不同线程中是可以安全访问的。
+
 There are a small number of static global variables which are used to control the overall behavior of the library (e.g. whether to use range-checking, the function to call on fatal error, etc). These variables are set directly by the user, so they should be initialized once at program startup and not modified by different threads.
 
+有少量静态全局变量被用来控制库的整体行为(e.g. 是否使用范围检查，出现致命错误时调用的函数，等)。这些变阿玲由用户直接设置，因此它们应该在程序启东市被初始化病不能被不同线程更改。
 
 
-## Deprecated Functions
+
+## 弃用的函数
 
 From time to time, it may be necessary for the definitions of some functions to be altered or removed from the library. In these circumstances the functions will first be declared *deprecated* and then removed from subsequent versions of the library. Functions that are deprecated can be disabled in the current release by setting the preprocessor definition `GSL_DISABLE_DEPRECATED`. This allows existing code to be tested for forwards compatibility.
 
+有些情况下，也许需要从库中更改或移除一些函数的定义。在这些情况下函数首先会被声明为*deprecated(译注: 弃用)*并在随后的库版本中被移除。被弃用的函数可以在当前发布版本中通过设置预处理器定义`GSL_DISABLE_DEPRECATED`来禁用。这允许已存代码来进行前向兼容性测试。
 
-
-## Code Reuse
+## 代码复用
 
 Where possible the routines in the library have been written to avoid dependencies between modules and files. This should make it possible to extract individual functions for use in your own applications, without needing to have the whole library installed. You may need to define certain macros such as `GSL_ERROR` and remove some `#include` statements in order to compile the files as standalone units. Reuse of the library code in this way is encouraged, subject to the terms of the GNU General Public License.
 
-### Footnotes
+在任何有可能的地方本库中的程序都被编写来可以避免模块和文件之间的依赖。这使得不需要安装正割库而将独立的函数抽取出来用在自己的应用中是可行的。你也许需要定义特定的宏比如`GSL_ERROR`和移除一些`#include`声明来将文件能作为独立单元编译。以这个方式重用库代码是鼓励的，遵从GNU通用公共许可证的条款。
 
-[[1]](https://www.gnu.org/software/gsl/doc/html/usage.html#id1)The last few digits may vary slightly depending on the compiler and platform used—this is normal
+### 脚注
 
-[[2]](https://www.gnu.org/software/gsl/doc/html/usage.html#id2)It is not needed on MacOS X
+[[1]](https://www.gnu.org/software/gsl/doc/html/usage.html#id1)最后几位数字有可能会轻微不同取决于使用的编译器和平台—这是正常的
+
+[[2]](https://www.gnu.org/software/gsl/doc/html/usage.html#id2)在MacOS X系统上不需要
 
 [[3]](https://www.gnu.org/software/gsl/doc/html/usage.html#id3)<http://www.network-theory.co.uk/gcc/intro/>
 
-[[4]](https://www.gnu.org/software/gsl/doc/html/usage.html#id4)`/etc/ld.so.conf`on GNU/Linux systems
+[[4]](https://www.gnu.org/software/gsl/doc/html/usage.html#id4)在GNU/Linux系统上是`/etc/ld.so.conf`
