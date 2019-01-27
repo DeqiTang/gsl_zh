@@ -1,12 +1,18 @@
-# Special Functions
+# 特殊函数
 
 This chapter describes the GSL special function library. The library includes routines for calculating the values of Airy functions, Bessel functions, Clausen functions, Coulomb wave functions, Coupling coefficients, the Dawson function, Debye functions, Dilogarithms, Elliptic integrals, Jacobi elliptic functions, Error functions, Exponential integrals, Fermi-Dirac functions, Gamma functions, Gegenbauer functions, Hermite polynomials and functions, Hypergeometric functions, Laguerre functions, Legendre functions and Spherical Harmonics, the Psi (Digamma) Function, Synchrotron functions, Transport functions, Trigonometric functions and Zeta functions. Each routine also computes an estimate of the numerical error in the calculated value of the function.
 
+本章面搜狐GSL特殊函数库。本库包含计算艾里函数，贝塞尔函数，克劳森函数，库伦波函数，耦合系数，道森函数，德拜函数，二重对数，椭圆积分，雅可比椭圆函数，误差函数，指数积分，费米狄拉克函数，伽马函数，盖根堡函数，厄米特多项式和函数，超几何函数，拉盖尔函数，勒让德函数和球谐函数，Psi(双伽马)函数，同步加速函数，输运函数，三角函数和ζ函数的值的程序。每个程序也计算函数所计算的值的数值误差的一个估值。
+
 The functions in this chapter are declared in individual header files, such as `gsl_sf_airy.h`, `gsl_sf_bessel.h`, etc. The complete set of header files can be included using the file `gsl_sf.h`.
 
-## Usage
+本章描述的函数被声明在单独的头文件，比如`gsl_sf_airy.h`，`gsl_sf_bessel.h`等。头文件的完全集能通过文件`gsl_sf.h`进行包含。
+
+## 用法
 
 The special functions are available in two calling conventions, a *natural form* which returns the numerical value of the function and an *error-handling form* which returns an error code. The two types of function provide alternative ways of accessing the same underlying code.
+
+特殊函数可通过两个调用约定进行获取，一个是*自然形式*其返回函数的数值，另一个是*误差处理形式*其返回一个误差代码。两个类型的函数提供了访问同样的底层代码的可选方式。
 
 The *natural form* returns only the value of the function and can be used directly in mathematical expressions. For example, the following function call will compute the value of the Bessel function ![J_0(x)](https://www.gnu.org/software/gsl/doc/html/_images/math/436b1799db46b1ecb38cc2fde801e882814c7119.png):
 
@@ -1808,6 +1814,8 @@ The following spherical functions are specializations of Legendre functions whic
 - int `gsl_sf_legendre_H3d_0_e`(double *lambda*, double *eta*, [gsl_sf_result](https://www.gnu.org/software/gsl/doc/html/specfunc.html#c.gsl_sf_result) * *result*)
 
   These routines compute the zeroth radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space,![L^{H3d}_0(\lambda,\eta) := {\sin(\lambda\eta) \over \lambda\sinh(\eta)}](https://www.gnu.org/software/gsl/doc/html/_images/math/c09087183c03126353c49bbbe7e75a8a00c382dd.png)for ![\eta \ge 0](https://www.gnu.org/software/gsl/doc/html/_images/math/58384bf02bfbf61d8c7c5d7481bff5b52ffa8f62.png). In the flat limit this takes the form ![L^{H3d}_0(\lambda,\eta) = j_0(\lambda\eta)](https://www.gnu.org/software/gsl/doc/html/_images/math/425507b74e68b3d5a9541f653ca7673e76daa9d5.png).
+
+  这些程序计算三维超几何空间的拉普拉斯算子的零次径向本征函数，$$L^{H3d}_0(\lambda,\eta) := {\sin(\lambda\eta) \over \lambda\sinh(\eta)}$$for $$\eta \ge 0$$. 在平滑极限下其形式为 $$L^{H3d}_0(\lambda,\eta) = j_0(\lambda\eta)$$.
 
 - double `gsl_sf_legendre_H3d_1`(double *lambda*, double *eta*)
 
