@@ -224,7 +224,15 @@ To avoid namespace conflicts all exported function names and variables have the 
 
 The `inline` keyword is not part of the original ANSI C standard (C89) so the library does not export any inline function definitions by default. Inline functions were introduced officially in the newer C99 standard but most C89 compilers have also included `inline` as an extension for a long time.
 
+`inline`关键字并不是原始ANSI C标准(C89)的一部分，因此本库默认不导出任何内联函数定义。内联函数在更新的C99标准中被正式地引入，但是大多数C89编译器也已经长时间将`inline`包含来作为一个扩展。
+
 To allow the use of inline functions, the library provides optional inline versions of performance-critical routines by conditional compilation in the exported header files. The inline versions of these functions can be included by defining the macro `HAVE_INLINE` when compiling an application:
+
+```
+$ gcc -Wall -c -DHAVE_INLINE example.c
+```
+
+为了允许使用内联函数，本库在导出的头文件中通过条件编译提供了性能至关重要的程序的可选内联版本。这些函数的内联版本在编译一个应用时能够通过定义宏`HAVE_INLINE`来包含。
 
 ```
 $ gcc -Wall -c -DHAVE_INLINE example.c
