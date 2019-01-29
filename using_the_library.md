@@ -146,9 +146,27 @@ $ ./a.out
 libgsl.so.0: cannot open shared object file: No such file or directory
 ```
 
-To avoid this error, either modify the system dynamic linker configuration [[4\]](https://www.gnu.org/software/gsl/doc/html/usage.html#f4) or define the shell variable `LD_LIBRARY_PATH` to include the directory where the library is installed.
+为了运行一个链接到共享库版本的程序，操作系统需要能够在运行时定位相应的`.so`文件。如果库无法被找到，下面的错误将会发生:
+
+```
+$ ./a.out
+./a.out: error while loading shared libraries:
+libgsl.so.0: cannot open shared object file: No such file or directory
+```
+
+To avoid this error, either modify the system dynamic linker configuration [[4]](https://www.gnu.org/software/gsl/doc/html/usage.html#f4) or define the shell variable `LD_LIBRARY_PATH` to include the directory where the library is installed.
 
 For example, in the Bourne shell (`/bin/sh` or `/bin/bash`), the library search path can be set with the following commands:
+
+```
+$ LD_LIBRARY_PATH=/usr/local/lib
+$ export LD_LIBRARY_PATH
+$ ./example
+```
+
+为了避免这个错误，要么更改系统动态链接器配置[[4]](https://www.gnu.org/software/gsl/doc/html/usage.html#f4) 或者定义shell环境变量`LD_LIBRARY_PATH`以包含本库安装的目录。
+
+例如，在Bourne shell(`/bin/sh`或者`/bin/bash`)中，库搜索路径能通过下列命令设置:
 
 ```
 $ LD_LIBRARY_PATH=/usr/local/lib
@@ -162,9 +180,17 @@ In the C-shell (`/bin/csh` or `/bin/tcsh`) the equivalent command is:
 % setenv LD_LIBRARY_PATH /usr/local/lib
 ```
 
+在C-shell(`/bin/csh`或者`/bin/tcsh`)中等价的命令是:
+
+```
+% setenv LD_LIBRARY_PATH /usr/local/lib
+```
+
 The standard prompt for the C-shell in the example above is the percent character %, and should not be typed as part of the command.
 
 To save retyping these commands each session they can be placed in an individual or system-wide login file.
+
+在上面例子中提到的C-shell的标准提示符是百分符号%，并不应当被当做命令一起输入。
 
 To compile a statically linked version of the program, use the `-static` flag in `gcc`:
 
@@ -172,21 +198,29 @@ To compile a statically linked version of the program, use the `-static` flag in
 $ gcc -static example.o -lgsl -lgslcblas -lm
 ```
 
-## ANSI C Compliance
+为了编译一个静态链接版本的程序，在`gcc`中使用`-static`标签:
+
+## 符合ANSI C
 
 The library is written in ANSI C and is intended to conform to the ANSI C standard (C89). It should be portable to any system with a working ANSI C compiler.
 
+本库是以ANSI C进行编写的并被打算来遵守ANSI C标准(C89)。其应当能够一直到任何具有可工作的ANSI C编译器的系统上。
+
 The library does not rely on any non-ANSI extensions in the interface it exports to the user. Programs you write using GSL can be ANSI compliant. Extensions which can be used in a way compatible with pure ANSI C are supported, however, via conditional compilation. This allows the library to take advantage of compiler extensions on those platforms which support them.
+
+本库所导出给用户的接口中不会依赖于任何非ANSI扩展。你使用GSL编写的程序会是遵从ANSI的。能够被以与纯ANSI C兼容的方式使用的扩展也是得到了支持，然而，需要经过条件编译。这允许本库去利用那些支持它们的平台上的编译器扩展的优势。
 
 When an ANSI C feature is known to be broken on a particular system the library will exclude any related functions at compile-time. This should make it impossible to link a program that would use these functions and give incorrect results.
 
+当一个ANSI C特征被发现在一个特定系统上崩溃是，本库将会在编译时排除任何相关的函数。这应当能使得链接一个将要使用这些函数并给出错误结果的程序是不可能的。
+
 To avoid namespace conflicts all exported function names and variables have the prefix `gsl_`, while exported macros have the prefix `GSL_`.
 
+为了避免名字空间冲突，所有导出的函数名字和变量具有前缀`gsl_`，而导出的宏具有前缀`GSL_`。
 
 
 
-
-## Inline functions
+## 内联函数
 
 The `inline` keyword is not part of the original ANSI C standard (C89) so the library does not export any inline function definitions by default. Inline functions were introduced officially in the newer C99 standard but most C89 compilers have also included `inline` as an extension for a long time.
 
