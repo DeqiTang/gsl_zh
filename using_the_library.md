@@ -406,7 +406,21 @@ gsl_foo_char             char
 gsl_foo_uchar            unsigned char
 ```
 
+对于库定义的类型采取了一个相应的方案，比如`gsl_vector`和`gsl_matrix`。在这个情形下，修改器被附加到类型名字后。例如，如果一个模块定义了一个新的类型相关的结构或者typedef`gsl_foo`，它将会按下列方式针对其它类型进行修改:
 
+```
+gsl_foo                  double
+gsl_foo_long_double      long double
+gsl_foo_float            float
+gsl_foo_long             long
+gsl_foo_ulong            unsigned long
+gsl_foo_int              int
+gsl_foo_uint             unsigned int
+gsl_foo_short            short
+gsl_foo_ushort           unsigned short
+gsl_foo_char             char
+gsl_foo_uchar            unsigned char
+```
 
 When a module contains type-dependent definitions the library provides individual header files for each type. The filenames are modified as shown in the below. For convenience the default header includes the definitions for all the types. To include only the double precision header file, or any other specific type, use its individual filename:
 
@@ -425,21 +439,44 @@ When a module contains type-dependent definitions the library provides individua
 #include <gsl/gsl_foo_uchar.h>         unsigned char
 ```
 
+当一个模块包含类型相关的定义时，本库为么一个类型提供了单独的头文件。文件名修改为如下所示。为了方便默认的头文件包含了所有类型的定义。为了仅包含双精度头文件，或者其它任何特定类型，使用单独的文件名:
+
+```
+#include <gsl/gsl_foo.h>               All types
+#include <gsl/gsl_foo_double.h>        double
+#include <gsl/gsl_foo_long_double.h>   long double
+#include <gsl/gsl_foo_float.h>         float
+#include <gsl/gsl_foo_long.h>          long
+#include <gsl/gsl_foo_ulong.h>         unsigned long
+#include <gsl/gsl_foo_int.h>           int
+#include <gsl/gsl_foo_uint.h>          unsigned int
+#include <gsl/gsl_foo_short.h>         short
+#include <gsl/gsl_foo_ushort.h>        unsigned short
+#include <gsl/gsl_foo_char.h>          char
+#include <gsl/gsl_foo_uchar.h>         unsigned char
+```
 
 
-## Compatibility with C++
+
+
+
+## 与C++兼容
 
 The library header files automatically define functions to have `extern "C"` linkage when included in C++ programs. This allows the functions to be called directly from C++.
 
 To use C++ exception handling within user-defined functions passed to the library as parameters, the library must be built with the additional `CFLAGS` compilation option `-fexceptions`.
 
+本库的头文件自动地定义了函数来具有`extern "C"`链接性，当其被包含进C++程序时。这允许函数从C++中被直接调用。
 
+为了在作为参数传递给库的用户定义的函数中使用C++异常处理，本库必须在构建时使用额外的`CFLAGS`编译选项`-fexceptions`。
 
 
 
 ## 数组别名
 
 The library assumes that arrays, vectors and matrices passed as modifiable arguments are not aliased and do not overlap with each other. This removes the need for the library to handle overlapping memory regions as a special case, and allows additional optimizations to be used. If overlapping memory regions are passed as modifiable arguments then the results of such functions will be undefined. If the arguments will not be modified (for example, if a function prototype declares them as `const` arguments) then overlapping or aliased memory regions can be safely used.
+
+本库假定当做可修改实参传递的数组，向量，矩阵不是别名并且不会相互重叠。这消除了需要库来将在特殊情形下处理重叠内存区域的需要，并允许使用额外的优化。如果重叠内存区域被当做可修改实参传递，那么这类函数的结果将是未定义的。如果实参不会被修改(例如，如果一个函数原型将它们声明为`const`实参)，那么重叠或者别名内存区域可以被安全地使用。
 
 ## 线程安全
 
