@@ -240,17 +240,31 @@ $ gcc -Wall -c -DHAVE_INLINE example.c
 
 If you use `autoconf` this macro can be defined automatically. If you do not define the macro `HAVE_INLINE` then the slower non-inlined versions of the functions will be used instead.
 
+如果你使用`autoconf`这个宏会被自动定义。如果你不定义宏`HAVE_INLINE`，那么相对更慢的这些函数的非内联版本的将会被使用。
+
 By default, the actual form of the inline keyword is `extern inline`, which is a `gcc` extension that eliminates unnecessary function definitions. If the form `extern inline` causes problems with other compilers a stricter autoconf test can be used, see [Autoconf Macros](https://www.gnu.org/software/gsl/doc/html/autoconf.html#chap-autoconf-macros).
 
+默认上，内联关键字的实际形式是`extern inline`，这是一个`gcc`扩展能够消除掉没必要的函数定义。如果`extern inline`格式导致其它编译器出现问题，一个更严格的autoconf也是可以使用的，参见[Autoconf Macros](https://www.gnu.org/software/gsl/doc/html/autoconf.html#chap-autoconf-macros)。
+
 When compiling with `gcc` in C99 mode (`gcc -std=c99`) the header files automatically switch to C99-compatible inline function declarations instead of `extern inline`. With other C99 compilers, define the macro `GSL_C99_INLINE` to use these declarations.
+
+当使用`gcc`在C99模式(`gcc -std=c99`)末实现编译时头文件会自动转换到C99兼容的内联函数声明而不是`extern inline`。使用其它C99编译器时，请定义宏`GSL_C99_INLINE`以使用这些声明。
+
+
 
 ## Long double
 
 In general, the algorithms in the library are written for double precision only. The `long double` type is not supported for actual computation.
 
+通常本库的算法是仅编写为双精度的。`long double`在实际计算中是不被支持的。
+
 One reason for this choice is that the precision of `long double` is platform dependent. The IEEE standard only specifies the minimum precision of extended precision numbers, while the precision of `double` is the same on all platforms.
 
+做这个选择的原因之一是双精度`long double`是平台相关的。IEEE标准仅仅声明了扩展精度数字的最小精度，而`double`的精度在所有平台上都是一致的。
+
 However, it is sometimes necessary to interact with external data in long-double format, so the vector and matrix datatypes include long-double versions.
+
+然而，有时与外部的long-double格式的数据进行交互会是需要的，因此向量和矩阵数据类型包含了long-double版本。
 
 It should be noted that in some system libraries the `stdio.h` formatted input/output functions `printf` and `scanf` are not implemented correctly for `long double`. Undefined or incorrect results are avoided by testing these functions during the `configure` stage of library compilation and eliminating certain GSL functions which depend on them if necessary. The corresponding line in the `configure` output looks like this:
 
@@ -258,15 +272,27 @@ It should be noted that in some system libraries the `stdio.h` formatted input/o
 checking whether printf works with long double... no
 ```
 
+需要强调的是在一些系统的库中`stdio.h`格式化输入/输出函数`printf`和`scanf`对于`long double`没有被正确地实现。未定义或者错误的结果可以通过在库编译的`configure`阶段测试这些函数以及如果有必要消除特定的依赖于它们GSL函数。`configure`输出中的相关行看起来像这样:
+
+```
+checking whether printf works with long double... no
+```
+
 Consequently when `long double` formatted input/output does not work on a given system it should be impossible to link a program which uses GSL functions dependent on this.
+
+因此当`long double`格式化输入/输出在一个给定系统不工作时，要链接一个使用依赖于此的GSL函数的程序是不可能的。
 
 If it is necessary to work on a system which does not support formatted `long double` input/output then the options are to use binary formats or to convert `long double` results into `double` for reading and writing.
 
+如果在一个不支持格式化`long double`输入/输出的系统上工作是所需要的，那么选择是使用二进制格式或者将`long double`结果转换为`double`来进行读入和写出。
 
 
-## Portability functions
+
+## 移植性函数
 
 To help in writing portable applications GSL provides some implementations of functions that are found in other libraries, such as the BSD math library. You can write your application to use the native versions of these functions, and substitute the GSL versions via a preprocessor macro if they are unavailable on another platform.
+
+为了帮助编写可移植性应用，GSL提供了一些在其它库中可见的函数，比如BSD数学库。你可以使用这些函数的原声版本，以及在它们在其它平台上不可用时通过预处理器宏来替代为GSL版本。
 
 For example, after determining whether the BSD function `hypot()` is available you can include the following macro definitions in a file `config.h` with your application:
 
@@ -278,13 +304,27 @@ For example, after determining whether the BSD function `hypot()` is available y
 #endif
 ```
 
+例如，在确定是否BSD函数`hypot()`可以使用时你可以在你的应用的一个文件`config.h`中包含下面的宏定义:
+
+```
+/* Substitute gsl_hypot for missing system hypot */
+
+#ifndef HAVE_HYPOT
+#define hypot gsl_hypot
+#endif
+```
+
 The application source files can then use the include command `#include <config.h>` to replace each occurrence of `hypot()` by [`gsl_hypot()`](https://www.gnu.org/software/gsl/doc/html/math.html#c.gsl_hypot) when `hypot()` is not available. This substitution can be made automatically if you use `autoconf`, see [Autoconf Macros](https://www.gnu.org/software/gsl/doc/html/autoconf.html#chap-autoconf-macros).
+
+应用源文件进而可以使用包含命令`#include <config.h>`来在`hypot()`函数不可用时将每个出现的`hypot()`替换为[`gsl_hypot()`](https://www.gnu.org/software/gsl/doc/html/math.html#c.gsl_hypot)。这个替代可以被自动进行如果你使用`autoconf`，参见[Autoconf Macros](https://www.gnu.org/software/gsl/doc/html/autoconf.html#chap-autoconf-macros)。
 
 In most circumstances the best strategy is to use the native versions of these functions when available, and fall back to GSL versions otherwise, since this allows your application to take advantage of any platform-specific optimizations in the system library. This is the strategy used within GSL itself.
 
+在大多数情况下最好的策略是使用在可获取时使用这些函数的原生版本而在其它情况下退回到GSL版本，因为这会允许你的应用利用好系统库中任何平台特定的优化的优势。这是GSL本身使用的策略。
 
 
-## Alternative optimized functions
+
+## 可替代优化函数
 
 The main implementation of some functions in the library will not be optimal on all architectures. For example, there are several ways to compute a Gaussian random variate and their relative speeds are platform-dependent. In cases like this the library provides alternative implementations of these functions with the same interface. If you write your application using calls to the standard implementation you can select an alternative version later via a preprocessor definition. It is also possible to introduce your own optimized functions this way while retaining portability. The following lines demonstrate the use of a platform-dependent choice of methods for sampling from the Gaussian distribution:
 
@@ -297,9 +337,22 @@ The main implementation of some functions in the library will not be optimal on 
 #endif
 ```
 
+本库中的一些函数的主要实现并不是在所有架构上都是最佳的。例如，有许多方法去计算一个高斯随机变量并且它们的相对速度也是平台相关的。在这种情形下，本库提供这些函数的有同样接口的可替代的实现。如果编写程序使用了对标准实现的调用，你可以过后通过预处理器定义来选择一个可替代的版本。通过这个方式在保持可移植性的情况下引入你自己的优化的函数也是可能的。下面的行展示了使用平台相关来选择的方法来对高斯分布进行采样:
+
+```
+#ifdef SPARC
+#define gsl_ran_gaussian gsl_ran_gaussian_ratio_method
+#endif
+#ifdef INTEL
+#define gsl_ran_gaussian my_gaussian
+#endif
+```
+
 These lines would be placed in the configuration header file `config.h` of the application, which should then be included by all the source files. Note that the alternative implementations will not produce bit-for-bit identical results, and in the case of random number distributions will produce an entirely different stream of random variates.
 
-## Support for different numeric types
+这些行将会被至于应用的配置头文件`config.h`中，其将被所有源文件包含。注意可选的实现不会产生逐位对应一致的结果，并且在随机数分布的情形下会产生一个完全不同的随机变量流。
+
+## 对不同数值类型的支持
 
 Many functions in the library are defined for different numeric types. This feature is implemented by varying the name of the function with a type-related modifier—a primitive form of C++ templates. The modifier is inserted into the function name after the initial module prefix. The following table shows the function names defined for all the numeric types of an imaginary module `gsl_foo` with function `fn()`:
 
@@ -317,7 +370,25 @@ gsl_foo_char_fn          char
 gsl_foo_uchar_fn         unsigned char
 ```
 
+在本库中的许多函数为不同数值类型都被定义。这个特征的实现是通过使用一个类型相关的修改器来变化函数的名字—C++模板的原始形式。修改器是被插入到初始模块前缀之后。下面的表格展示了一个想想的模块`gsl_foo`的函数`fn()`的对于所有的数值类型的定义的函数名字:
+
+```
+gsl_foo_fn               double
+gsl_foo_long_double_fn   long double
+gsl_foo_float_fn         float
+gsl_foo_long_fn          long
+gsl_foo_ulong_fn         unsigned long
+gsl_foo_int_fn           int
+gsl_foo_uint_fn          unsigned int
+gsl_foo_short_fn         short
+gsl_foo_ushort_fn        unsigned short
+gsl_foo_char_fn          char
+gsl_foo_uchar_fn         unsigned char
+```
+
 The normal numeric precision `double` is considered the default and does not require a suffix. For example, the function [`gsl_stats_mean()`](https://www.gnu.org/software/gsl/doc/html/statistics.html#c.gsl_stats_mean) computes the mean of double precision numbers, while the function `gsl_stats_int_mean()` computes the mean of integers.
+
+正常的数值精度`double`被认为是默认的并不需要一个前缀。例如，函数`gsl_stats_mean()`计算双精度数字的平均值，而函数`gsl_stats_int_mean()`计算整数的平均值。
 
 A corresponding scheme is used for library defined types, such as `gsl_vector` and `gsl_matrix`. In this case the modifier is appended to the type name. For example, if a module defines a new type-dependent struct or typedef `gsl_foo` it is modified for other types in the following way:
 
@@ -334,6 +405,8 @@ gsl_foo_ushort           unsigned short
 gsl_foo_char             char
 gsl_foo_uchar            unsigned char
 ```
+
+
 
 When a module contains type-dependent definitions the library provides individual header files for each type. The filenames are modified as shown in the below. For convenience the default header includes the definitions for all the types. To include only the double precision header file, or any other specific type, use its individual filename:
 
