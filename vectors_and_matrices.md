@@ -1,8 +1,10 @@
-# Vectors and Matrices
+# 向量和矩阵
 
 The functions described in this chapter provide a simple vector and matrix interface to ordinary C arrays. The memory management of these arrays is implemented using a single underlying type, known as a block. By writing your functions in terms of vectors and matrices you can pass a single structure containing both data and dimensions as an argument without needing additional function parameters. The structures are compatible with the vector and matrix formats used by BLAS routines.
 
-## Data types
+本章描述的函数提供了对于C数组的简单的向量和矩阵接口。这些数组的内存管理是通过使用一个单一的称作block的底层类型来实现的。通过编写你自己的关于向量和矩阵的函数，你可以传递一个单一结构做为实参其包含数据以及维度，而不需要额外的函数参数。这些结构与BLAS程序所使用的关于向量和矩阵的格式是兼容的。
+
+## 数据类型
 
 All the functions are available for each of the standard data-types. The versions for `double` have the prefix `gsl_block`, `gsl_vector` and `gsl_matrix`. Similarly the versions for single-precision `float` arrays have the prefix `gsl_block_float`, `gsl_vector_float` and `gsl_matrix_float`. The full list of available types is given below,
 
@@ -23,7 +25,28 @@ All the functions are available for each of the standard data-types. The version
 | gsl_block_complex_float       | complex float       |
 | gsl_block_complex_long_double | complex long double |
 
+所有的函数对于每一个标准数据类型都是可获取的。`double`版本的函数具有前缀`gsl_block`，`gsl_vector`和`gsl_matrix`。类似的单精度`float`数组版本具有前缀`gsl_block_float`，`gsl_vector_float`和`gsl_matrix_float`。可用类型的完整列表给在下面，
+
+| Prefix                        | Type                |
+| ----------------------------- | ------------------- |
+| gsl_block                     | double              |
+| gsl_block_float               | float               |
+| gsl_block_long_double         | long double         |
+| gsl_block_int                 | int                 |
+| gsl_block_uint                | unsigned int        |
+| gsl_block_long                | long                |
+| gsl_block_ulong               | unsigned long       |
+| gsl_block_short               | short               |
+| gsl_block_ushort              | unsigned short      |
+| gsl_block_char                | char                |
+| gsl_block_uchar               | unsigned char       |
+| gsl_block_complex             | complex double      |
+| gsl_block_complex_float       | complex float       |
+| gsl_block_complex_long_double | complex long double |
+
 Corresponding types exist for the `gsl_vector` and `gsl_matrix` functions.
+
+相关类型对于`gsl_vector`和`gsl_matrix`函数是存在的。
 
 
 
@@ -35,49 +58,83 @@ For consistency all memory is allocated through a `gsl_block` structure. The str
 
   `typedef struct {   size_t size;   double * data; } gsl_block; `
 
+为了一致性所有的内存都通过一个`gsl_block`结构进行分配。这个结构包含两个成员，内存区域的大小以及一个指向该内存的指针。`gsl_block`结构看起来像这样，
+
+* `gsl_block`
+
+  `typedef struct {   size_t size;   double * data; } gsl_block; `
+
 Vectors and matrices are made by *slicing* an underlying block. A slice is a set of elements formed from an initial offset and a combination of indices and step-sizes. In the case of a matrix the step-size for the column index represents the row-length. The step-size for a vector is known as the *stride*.
+
+向量和矩阵是通过对下层的block进行切片得到的。一个切片有一个初始偏移量和下标以及步长的组合形成的一个元素的集合。在矩阵情况下列指数的步长代表了行的长度。一个向量的步长被称作跨度。
 
 The functions for allocating and deallocating blocks are defined in `gsl_block.h`.
 
-### Block allocation
+用于分配和释放blocks的函数声明在`gsl_block.h`中。
+
+### Block 分配
 
 The functions for allocating memory to a block follow the style of `malloc` and `free`. In addition they also perform their own error checking. If there is insufficient memory available to allocate a block then the functions call the GSL error handler (with an error number of [`GSL_ENOMEM`](https://www.gnu.org/software/gsl/doc/html/err.html#c.GSL_ENOMEM)) in addition to returning a null pointer. Thus if you use the library error handler to abort your program then it isn’t necessary to check every `alloc`.
+
+为block分配内存的函数遵循`malloc`和`free`的样式。此外它们也会执行它们自己的错误检查。如果没有足够的内存可以使用来分配一个block，那么函数将会除了返回一个空指针以外调用GSL错误处理器(使用[`GSL_ENOMEM`](https://www.gnu.org/software/gsl/doc/html/err.html#c.GSL_ENOMEM)错误编号)。
 
 - [gsl_block](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_block) * `gsl_block_alloc`(size_t *n*)
 
   This function allocates memory for a block of `n` double-precision elements, returning a pointer to the block struct. The block is not initialized and so the values of its elements are undefined. Use the function [`gsl_block_calloc()`](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_block_calloc) if you want to ensure that all the elements are initialized to zero.Zero-sized requests are valid and return a non-null result. A null pointer is returned if insufficient memory is available to create the block.
 
+  这个为一个具有n个双精度元素的block分配内存，返回一个指向block结构的指针。block不会被初始化并因此其元素的值是未定义的。如果你想要确保所有的元素都被初始化为零，使用函数 [`gsl_block_calloc()`](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_block_calloc)函数。零尺寸的请求也是有效的并会返回一个非空结果。如果内存不足以创建block将返回一个空指针。
+
 - [gsl_block](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_block) * `gsl_block_calloc`(size_t *n*)
 
   This function allocates memory for a block and initializes all the elements of the block to zero.
+
+  这个函数为一个block分配内存并将所有元素初始化为零。
 
 - void `gsl_block_free`([gsl_block](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_block) * *b*)
 
   This function frees the memory used by a block `b` previously allocated with [`gsl_block_alloc()`](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_block_alloc) or [`gsl_block_calloc()`](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_block_calloc).
 
-### Reading and writing blocks
+  这个函数释放由block`b`使用的之前由[`gsl_block_alloc()`](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_block_alloc) 或者[`gsl_block_calloc()`](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_block_calloc)函数分配内存。
+
+  
+
+### Blocks的读入和写出
 
 The library provides functions for reading and writing blocks to a file as binary data or formatted text.
+
+这个库提供函数用于按照二进制数据或者格式化文本来读入写出blocks到一个文件。
 
 - int `gsl_block_fwrite`(FILE * *stream*, const [gsl_block](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_block) * *b*)
 
   This function writes the elements of the block `b` to the stream `stream` in binary format. The return value is 0 for success and `GSL_EFAILED` if there was a problem writing to the file. Since the data is written in the native binary format it may not be portable between different architectures.
 
+  这个函数将block`b`的元素以二进制格式写到流`stream`中。成功时返回的值是0，如果写出到文件有错误返回值就是`GSL_EFAILED`。因为数据是按照原声二进制格式来写出，在不同架构上有可能是不可移植的。
+
 - int `gsl_block_fread`(FILE * *stream*, [gsl_block](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_block) * *b*)
 
   This function reads into the block `b` from the open stream `stream` in binary format. The block `b` must be preallocated with the correct length since the function uses the size of `b` to determine how many bytes to read. The return value is 0 for success and `GSL_EFAILED` if there was a problem reading from the file. The data is assumed to have been written in the native binary format on the same architecture.
+
+  合格函数从打开的流`stream`中以二进制格式读入block`b`。block`b`必须提前分配为正确的长度，因为函数会使用`b`的尺寸来决定读入多少字节。如果成功返回的值是0，如果从文件读入时发生错误将返回`GSL_EFAILED`。在同样的架构上数据被认为是写入为原生二进制格式。
 
 - int `gsl_block_fprintf`(FILE * *stream*, const [gsl_block](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_block) * *b*, const char * *format*)
 
   This function writes the elements of the block `b` line-by-line to the stream `stream` using the format specifier `format`, which should be one of the `%g`, `%e` or `%f` formats for floating point numbers and `%d` for integers. The function returns 0 for success and `GSL_EFAILED` if there was a problem writing to the file.
 
+  这个函数将block`b`的元素按行使用格式声明`format`来写入到流`stream`中，格式声明应当是对于浮点数为`%g`，`%e`或者`%f`格式之一对于整数是`%d`格式。如果成功函数返回0，而当写入文件出现问题时返回`GSL_EFAILED`。
+
 - int `gsl_block_fscanf`(FILE * *stream*, [gsl_block](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_block) * *b*)
 
   This function reads formatted data from the stream `stream` into the block `b`. The block `b`must be preallocated with the correct length since the function uses the size of `b` to determine how many numbers to read. The function returns 0 for success and `GSL_EFAILED` if there was a problem reading from the file.
 
-### Example programs for blocks
+  这个函数从流`stream`中读取格式化数据到block`b`中。block`b`必须提前分配为正确的尺寸，因为函数将使用`b`的尺寸来决定读取多少数字。如果成功函数返回0，而当从文件读取发生错误时返回`GSL_EFAILED`。
+
+  
+
+### 用于block的示例程序
 
 The following program shows how to allocate a block,
+
+下列程序展示如何分配一个block，
 
 ```
 #include <stdio.h>
@@ -98,6 +155,8 @@ main (void)
 
 Here is the output from the program,
 
+下面是程序的输出，
+
 ```
 length of block = 100
 block data address = 0x804b0d8
@@ -105,7 +164,7 @@ block data address = 0x804b0d8
 
 
 
-## Vectors
+## 向量
 
 Vectors are defined by a [`gsl_vector`](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector) structure which describes a slice of a block. Different vectors can be created which point to the same block. A vector slice is a set of equally-spaced elements of an area of memory.
 
