@@ -168,17 +168,29 @@ block data address = 0x804b0d8
 
 Vectors are defined by a [`gsl_vector`](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector) structure which describes a slice of a block. Different vectors can be created which point to the same block. A vector slice is a set of equally-spaced elements of an area of memory.
 
+向量被结构`gsl_vector`定义，其描述了一个block的切片。可以创建指向统一个block的不同向量。一个向量切片是一个由一块内存区域的等间距元素的集合。
+
 The [`gsl_vector`](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector) structure contains five components, the *size*, the *stride*, a pointer to the memory where the elements are stored, `data`, a pointer to the block owned by the vector, `block`, if any, and an ownership flag, `owner`. The structure is very simple and looks like this,
 
 - `gsl_vector`
 
   `typedef struct {   size_t size;   size_t stride;   double * data;   gsl_block * block;   int owner; } gsl_vector; `
 
+`gsl_vector`结构包含五个成员，尺寸，步长，一个指向存储有元素的内存区域的指针`data`，一个指向由向量拥有的block的指针`block`，若有的话，还有一个拥有权标识，`owner`。结构非常简单且看起来就像这样，
+
+* `gsl_vector`
+
+  `typedef struct {   size_t size;   size_t stride;   double * data;   gsl_block * block;   int owner; } gsl_vector; `
+
 The `size` is simply the number of vector elements. The range of valid indices runs from 0 to `size-1`. The `stride` is the step-size from one element to the next in physical memory, measured in units of the appropriate datatype. The pointer `data` gives the location of the first element of the vector in memory. The pointer `block` stores the location of the memory block in which the vector elements are located (if any). If the vector owns this block then the `owner` field is set to one and the block will be deallocated when the vector is freed. If the vector points to a block owned by another object then the `owner` field is zero and any underlying block will not be deallocated with the vector.
+
+`size`很简单就是向量元素的数量。有效指数的范围经0到`size-1`.`stride`是是物理内存上从一个元素到下一个元素的步长大小，由合适的数据类型作为单位进行衡量。指针`data`给出了内存中向量的第一个元素的位置。指针`block`存储了向量所位于的内存块的位置(如果有的话)。如果向量拥有该block，那么`owner`域被设为1，并且当向量被释放以后该block也会被释放。如果向量指向一个由另一个对象拥有的block，那么`owner`域被设为0，并且任何低层的block都不会随向量一起被释放。
 
 The functions for allocating and accessing vectors are defined in `gsl_vector.h`.
 
-### Vector allocation
+用于分配和访问向量的函数被声明在`gsl_vector.h`中。
+
+### 向量分配
 
 The functions for allocating memory to a vector follow the style of `malloc` and `free`. In addition they also perform their own error checking. If there is insufficient memory available to allocate a vector then the functions call the GSL error handler (with an error number of [`GSL_ENOMEM`](https://www.gnu.org/software/gsl/doc/html/err.html#c.GSL_ENOMEM)) in addition to returning a null pointer. Thus if you use the library error handler to abort your program then it isn’t necessary to check every `alloc`.
 
