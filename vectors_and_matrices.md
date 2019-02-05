@@ -194,25 +194,37 @@ The functions for allocating and accessing vectors are defined in `gsl_vector.h`
 
 The functions for allocating memory to a vector follow the style of `malloc` and `free`. In addition they also perform their own error checking. If there is insufficient memory available to allocate a vector then the functions call the GSL error handler (with an error number of [`GSL_ENOMEM`](https://www.gnu.org/software/gsl/doc/html/err.html#c.GSL_ENOMEM)) in addition to returning a null pointer. Thus if you use the library error handler to abort your program then it isn’t necessary to check every `alloc`.
 
+用于为一个向量分配内存的函数遵循`malloc`和`free`的风格。此外它们也会自己执行错误检查。如果没有足够的内存用于分配给一个向量，函数将会除了返回一个空指针还会调用GSL错误处理器(具有一个错误编号`GSL_ENOMEM`)。因此如果你使用库错误处理器来终止你的程序，你不需要去检查每一个`alloc`。
+
 - [gsl_vector](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector) * `gsl_vector_alloc`(size_t *n*)
 
   This function creates a vector of length n, returning a pointer to a newly initialized vector struct. A new block is allocated for the elements of the vector, and stored in the `block` component of the vector struct. The block is “owned” by the vector, and will be deallocated when the vector is deallocated. Zero-sized requests are valid and return a non-null result.
+
+  这个函数创造一个长度为n的向量，返回一个指向新初始化的向量结构的指针。一个新的block会被分配用于向量的每一个元素的存储，并且会被存储在向量结构的`block`成员中。block由向量所拥有，并在向量被释放时会被释放。零尺寸的向量的请求也是合法的并会返回一个非空结果。
 
 - [gsl_vector](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector) * `gsl_vector_calloc`(size_t *n*)
 
   This function allocates memory for a vector of length `n` and initializes all the elements of the vector to zero.
 
+  这个函数为长度为`n`的向量分配内存并将向量的所有成员初始化为零。
+
 - void `gsl_vector_free`([gsl_vector](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector) * *v*)
 
   This function frees a previously allocated vector `v`. If the vector was created using [`gsl_vector_alloc()`](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_alloc) then the block underlying the vector will also be deallocated. If the vector has been created from another object then the memory is still owned by that object and will not be deallocated.
 
+  这个函数释放一个之前分配的向量`v`。如果向量是通过[`gsl_vector_alloc()`](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_alloc) 创造的，那么向量底层的block将也会被释放掉。如果向量是从另一个对象创造的，那么内存将仍然由那个对象拥有并不将会被释放。
 
 
-### Accessing vector elements
 
-Unlike Fortran compilers, C compilers do not usually provide support for range checking of vectors and matrices. [[1\]](https://www.gnu.org/software/gsl/doc/html/vectors.html#f1) The functions [`gsl_vector_get()`](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_get) and [`gsl_vector_set()`](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_set) can perform portable range checking for you and report an error if you attempt to access elements outside the allowed range.
+### 访问向量成员
+
+Unlike Fortran compilers, C compilers do not usually provide support for range checking of vectors and matrices. [[1]](https://www.gnu.org/software/gsl/doc/html/vectors.html#f1) The functions [`gsl_vector_get()`](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_get) and [`gsl_vector_set()`](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_set) can perform portable range checking for you and report an error if you attempt to access elements outside the allowed range.
+
+不像Fortran编译器，C编译器通常不会提供向量和矩阵的范围检查支持。[[1]](https://www.gnu.org/software/gsl/doc/html/vectors.html#f1)函数 [`gsl_vector_get()`](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_get) 和[`gsl_vector_set()`](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_set)可以为你执行可移植的范围检查并在你试图访问允许范围外的元素的时候报告错误。
 
 The functions for accessing the elements of a vector or matrix are defined in `gsl_vector.h` and declared `extern inline` to eliminate function-call overhead. You must compile your program with the preprocessor macro `HAVE_INLINE` defined to use these functions.
+
+用于访问向量或者矩阵的成员的函数被定义在头文件`gsl_vector.h`，并被声明为`extern inline`来消除函数调用开销。你在编译程序时必须要定义预处理器宏`HAVE_INLINE来`使用这些函数。
 
 - `GSL_RANGE_CHECK_OFF`
 
