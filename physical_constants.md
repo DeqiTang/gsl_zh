@@ -26,45 +26,67 @@ The full list of constants is described briefly below. Consult the header files 
 
   The permeability of free space, ![\mu_0](https://www.gnu.org/software/gsl/doc/html/_images/math/5aa6e1c125e18e7278a43635e3f703e590567f7a.png). This constant is defined in the MKSA system only.
 
+  自由空间的磁导率，$$\mu_0$$。这个常数仅以MKSA体系定义。
+
 - `GSL_CONST_MKSA_VACUUM_PERMITTIVITY`
 
   The permittivity of free space, ![\epsilon_0](https://www.gnu.org/software/gsl/doc/html/_images/math/ff8259230190e6a23c5c3db6c2874cf092dfa597.png). This constant is defined in the MKSA system only.
+
+  自由空间的介电常数，$$\epsilon_0$$。这个常数仅以MKSA体系定义。
 
 - `GSL_CONST_MKSA_PLANCKS_CONSTANT_H`
 
   Planck’s constant, ![h](https://www.gnu.org/software/gsl/doc/html/_images/math/40537c284ff40128b45f39365983e63b41d9f731.png).
 
+  普朗克常数，$$h$$。
+
 - `GSL_CONST_MKSA_PLANCKS_CONSTANT_HBAR`
 
   Planck’s constant divided by ![2\pi](https://www.gnu.org/software/gsl/doc/html/_images/math/059fbd5d7d78643be5cf4a37b45b0f8140e2d605.png), ![\hbar](https://www.gnu.org/software/gsl/doc/html/_images/math/744f2e3772d21829d5709397eb94e48454abe400.png).
+
+  普朗克常数除以$$2\pi$$，$$\hbar$$。
 
 - `GSL_CONST_NUM_AVOGADRO`
 
   Avogadro’s number, ![N_a](https://www.gnu.org/software/gsl/doc/html/_images/math/43e1b83f4660f134450bf96ea213546bd11710fc.png).
 
+  阿伏伽德罗常数，$$N_a$$。
+
 - `GSL_CONST_MKSA_FARADAY`
 
   The molar charge of 1 Faraday.
+
+  1法拉第的摩尔电荷。
 
 - `GSL_CONST_MKSA_BOLTZMANN`
 
   The Boltzmann constant, ![k](https://www.gnu.org/software/gsl/doc/html/_images/math/90645b5c2abc13d7de104fd87abeb2f19406e5f8.png).
 
+  玻尔兹曼常数，$$k$$。
+
 - `GSL_CONST_MKSA_MOLAR_GAS`
 
   The molar gas constant, ![R_0](https://www.gnu.org/software/gsl/doc/html/_images/math/b2ca85120822033eb09f9a1b72245dd537afdbaa.png).
+
+  摩尔气体常数，$$R_0$$。
 
 - `GSL_CONST_MKSA_STANDARD_GAS_VOLUME`
 
   The standard gas volume, ![V_0](https://www.gnu.org/software/gsl/doc/html/_images/math/00136b16b615351d0f38ce9132fae0ed3b00fa61.png).
 
+  标准气体体积，$$V_0$$。
+
 - `GSL_CONST_MKSA_STEFAN_BOLTZMANN_CONSTANT`
 
   The Stefan-Boltzmann radiation constant, ![\sigma](https://www.gnu.org/software/gsl/doc/html/_images/math/d4e96af4d650f28ddd3f3959a0c1054d4098ed8f.png).
 
+  斯蒂芬-玻尔兹曼辐射常数，$$\sigma$$。
+
 - `GSL_CONST_MKSA_GAUSS`
 
   The magnetic field of 1 Gauss.
+
+  1高斯的磁场。
 
 
 
