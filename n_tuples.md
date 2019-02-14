@@ -56,21 +56,29 @@ All the ntuple functions are defined in the header file `gsl_ntuple.h`.
 
   This function writes the current ntuple `ntuple->ntuple_data` of size `ntuple->size` to the corresponding file.
 
+  这个函数将当前大小为`ntuple->size`的N重元组的数据`ntuple->ntuple_data`写入相应文件.
+
 - int `gsl_ntuple_bookdata`([gsl_ntuple](https://www.gnu.org/software/gsl/doc/html/ntuple.html#c.gsl_ntuple) * *ntuple*)
 
   This function is a synonym for [`gsl_ntuple_write()`](https://www.gnu.org/software/gsl/doc/html/ntuple.html#c.gsl_ntuple_write).
 
-## Reading ntuples
+  这个函数是[`gsl_ntuple_write()`](https://www.gnu.org/software/gsl/doc/html/ntuple.html#c.gsl_ntuple_write)的同义词.
+
+## 读取N重元组
 
 - int `gsl_ntuple_read`([gsl_ntuple](https://www.gnu.org/software/gsl/doc/html/ntuple.html#c.gsl_ntuple) * *ntuple*)
 
   This function reads the current row of the ntuple file for `ntuple` and stores the values in `ntuple->data`.
 
-## Closing an ntuple file
+  这个函数读取`ntuple`N重元组文件的当前行并讲值存入`ntuple->data`中.
+
+## 关闭一个N重元组文件
 
 - int `gsl_ntuple_close`([gsl_ntuple](https://www.gnu.org/software/gsl/doc/html/ntuple.html#c.gsl_ntuple) * *ntuple*)
 
   This function closes the ntuple file `ntuple` and frees its associated allocated memory.
+
+  这个函数讲N重元组文件`ntuple`关闭并其分配的相关的内存.
 
 ## Histogramming ntuple values
 
