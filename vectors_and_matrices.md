@@ -229,10 +229,12 @@ The functions for accessing the elements of a vector or matrix are defined in `g
 - `GSL_RANGE_CHECK_OFF`
 
   If necessary you can turn off range checking completely without modifying any source files by recompiling your program with the preprocessor definition [`GSL_RANGE_CHECK_OFF`](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.GSL_RANGE_CHECK_OFF). Provided your compiler supports inline functions the effect of turning off range checking is to replace calls to `gsl_vector_get(v,i)` by `v->data[i*v->stride]` and calls to `gsl_vector_set(v,i,x)` by`v->data[i*v->stride]=x`. Thus there should be no performance penalty for using the range checking functions when range checking is turned off.
+  如果有必要你可以在不更改任何源文件的情况下通过预处理器定义[`GSL_RANGE_CHECK_OFF`](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.GSL_RANGE_CHECK_OFF)来关闭范围检查并重新编译你的程序。如果你的编译器支持内联函数，关闭范围检查的影响就是用`v->data[i*v->stride]`替换对`gsl_vector_get(v, i)`的调用，用`v->data[i*v->stride]=x`替换对`gsl_vector_set(v, i, x)`的调用。因此在范围检查被关闭的时候使用范围检查函数将会有性能上的损失。
 
 - `GSL_C99_INLINE`
 
   If you use a C99 compiler which requires inline functions in header files to be declared `inline`instead of `extern inline`, define the macro [`GSL_C99_INLINE`](https://www.gnu.org/software/gsl/doc/html/vectors.html#c.GSL_C99_INLINE) (see [Inline functions](https://www.gnu.org/software/gsl/doc/html/usage.html#sec-inline-functions)). With GCC this is selected automatically when compiling in C99 mode (`-std=c99`).
+  如果你使用一个C99编译器，其需要在头文件中的内联函数被生命为 `inline` 而不是 `extern inline`，定义宏 [`GSL_C99_INLINE`](https://www.gnu.org/softwares/gsl/doc/html/vectors.html#c.GSL_C99_INLINE)(参考 [Inline funcitons](https://www.gnu.org/software/gsl/doc/html/usage.html#sec-inline-functions))。对于GCC在以C99模式(`-std=c99`)编译时会自动选择这样做。
 
 - `gsl_check_range`
 
