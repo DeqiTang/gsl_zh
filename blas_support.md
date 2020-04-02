@@ -539,3 +539,4 @@ Postscript versions of the latter two papers are available from <http://www.netl
 ### Footnotes
 
 [[1]](https://www.gnu.org/software/gsl/doc/html/blas.html#id1)In the low-level CBLAS interface, a negative stride accesses the vector elements in reverse order, i.e. the ![i](https://www.gnu.org/software/gsl/doc/html/_images/math/1cc632900aae8b2837a1f383619c0ad753be7d29.png)-th element is given by ![(N-i)*|incx|](https://www.gnu.org/software/gsl/doc/html/_images/math/06be90af20cf3efc17d4b4cdd99f56502f4faa62.png) for ![incx < 0](https://www.gnu.org/software/gsl/doc/html/_images/math/db34591c31985b279a480df200850f9965de7a15.png).
+
