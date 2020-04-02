@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'GSL Documentation ZH'
+project = 'GSL 中文文档'
 copyright = '2020, DeqiTang'
 author = 'DeqiTang'
 

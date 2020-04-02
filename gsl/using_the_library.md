@@ -1,4 +1,4 @@
-## 使用本库
+# 使用本库
 
 This chapter describes how to compile programs that use GSL, and introduces its conventions.
 
