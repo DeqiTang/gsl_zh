@@ -2,9 +2,9 @@
 
 .. index:: special functions
 
-*****************
-Special Functions
-*****************
+********
+特殊函数
+********
 
 This chapter describes the GSL special function library.  The library
 includes routines for calculating the values of Airy functions, Bessel
@@ -25,11 +25,10 @@ The functions in this chapter are declared in individual header files,
 such as :file:`gsl_sf_airy.h`, :file:`gsl_sf_bessel.h`, etc.  The complete
 set of header files can be included using the file :file:`gsl_sf.h`.
 
-本章描述的函数被声明在单独的头文件，比如`gsl_sf_airy.h`，`gsl_sf_bessel.h`等。头文件的完全集能通过文件`gsl_sf.h`进行包含。
+本章描述的函数被声明在单独的头文件, 比如\ :file:`gsl_sf_airy.h`\, \ :file:`gsl_sf_bessel.h`\等。头文件的完全集能通过文件\ :file:`gsl_sf.h`\进行包含。
 
 
-
-Usage
+用法
 =====
 
 The special functions are available in two calling conventions, a
@@ -38,14 +37,18 @@ an *error-handling form* which returns an error code.  The two types
 of function provide alternative ways of accessing the same underlying
 code.
 
-特殊函数可通过两个调用约定进行获取，一个是*自然形式*其返回函数的数值，另一个是*误差处理形式*其返回一个误差代码。两个类型的函数提供了访问同样的底层代码的可选方式。
+特殊函数可通过两个调用约定进行获取，一个是\ *自然形式* \其返回函数的数值，另一个是\ *误差处理形式*\其返回一个误差代码。两个类型的函数提供了访问同样的底层代码的可选方式。
 
 The *natural form* returns only the value of the function and can be
 used directly in mathematical expressions.  For example, the following
-function call will compute the value of the Bessel function
-:math:`J_0(x)`::
+function call will compute the value of the Bessel function :math:`J_0(x)`::
 
     double y = gsl_sf_bessel_J0 (x);
+
+\ *自然形式* \仅返回函数的值而可以被直接用在数学表达式中。比如，下面的函数
+调用将会计算Bessel函数\ :math:`J_0(x)`\::
+
+    double y = gsl_sf_bessel_J0(x);
 
 There is no way to access an error code or to estimate the error using
 this method.  To allow access to this information the alternative
@@ -54,18 +57,28 @@ error-handling form stores the value and error in a modifiable argument::
     gsl_sf_result result;
     int status = gsl_sf_bessel_J0_e (x, &result);
 
+使用这个方法是不可以获取误差代码或者估计误差值。要允许访问该信息，可选
+的误差处理方法是将结果值和误差存在一个可修改参数中::
+    
+    gsl_sf_result result;
+    int status = gsl_sf_bessel_J0_e (x, &result):
+
 The error-handling functions have the suffix :code:`_e`. The returned
 status value indicates error conditions such as overflow, underflow or
 loss of precision.  If there are no errors the error-handling functions
 return :code:`GSL_SUCCESS`.
 
-The gsl_sf_result struct
+gsl_sf_result 结构
 ========================
 
 The error handling form of the special functions always calculate an
 error estimate along with the value of the result.  Therefore,
 structures are provided for amalgamating a value and error estimate.
 These structures are declared in the header file :file:`gsl_sf_result.h`.
+
+特俗函数的异常处理形式总是在计算结果时同时计算出误差估计值。因此返回结构是
+为了将结果值与误差估计合并起来。
+这些结构被声明在了头文件\ :file:`gsl_sf_result.h` \中。
 
 The following struct contains value and error fields.
 
